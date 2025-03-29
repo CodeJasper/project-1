@@ -1,0 +1,29 @@
+---
+import Nav from '@/components/header/Nav.astro';
+import Dialog from '@/components/header/Dialog.astro'
+---
+
+<header class="bg-white">
+  <Nav />
+  <Dialog />
+</header>
+
+<script>
+  const handleToggleDialog = () => {
+    const headerOpenDialog = document.getElementById('headerOpenDialog');
+    const headerCloseDialog = document.getElementById('headerCloseDialog');
+    const headerDialog = document.getElementById('headerDialog');
+
+    if(!headerOpenDialog || !headerDialog || !headerCloseDialog) return;
+
+    headerOpenDialog.addEventListener('click', () => {
+      headerDialog.hidden = false;
+    })
+
+    headerCloseDialog.addEventListener('click', () => {
+      headerDialog.hidden = true;
+    })
+  }
+
+  handleToggleDialog();
+</script>
