@@ -1,5 +1,6 @@
 ---
 import Header from '@/components/header/Header.astro';
+import ReactQueryDevtoolsWrapper from '@/react_components/WrapperQueryDevtools'
 import '@/styles/global.css';
 ---
 
@@ -14,6 +15,7 @@ import '@/styles/global.css';
 		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 	</head>
 	<body>
+		{ process.env.NODE_ENV === "development" &&  <ReactQueryDevtoolsWrapper client:load />}
 		<Header />
 		<main class="container mx-auto pt-7">
 			<slot />
