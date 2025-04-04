@@ -1,12 +1,8 @@
 ---
 import Layout from "@/layouts/Layout.astro";
+import { prisma } from "@/prisma/connection.ts";
 
-const incomeTest = [
-  { value: "Bancolombia"  },
-  { value: "Bancobogota" },
-  { value: "Nequi", date: "27-03-2025" },
-];
-
+const accounts = await prisma.account.findMany({take: 10});
 ---
 
 <Layout>
@@ -18,10 +14,10 @@ const incomeTest = [
     </a>
   </div>
   <ul class="flex flex-col gap-4">
-    {incomeTest.map((income) => {
+    {accounts.map((account) => {
       return(
         <li class="flex justify-between items-center py-2 border-b border-gray-200">
-          <span class="text-xl">{income.value}</span>
+          <span class="text-xl">{account.name}</span>
         </li>
       )
     })}
