@@ -1,4 +1,5 @@
 import type { Income } from '@prisma/client';
+import { format } from 'date-fns';
 
 type IncomesListProps = {
   incomes: Income[];
@@ -6,6 +7,7 @@ type IncomesListProps = {
 
 export function IncomesList(props: IncomesListProps) {
   const { incomes } = props;
+
   return (
     <>
       <div className="pb-4 mb-7 flex justify-between items-center border-b border-gray-400">
@@ -21,9 +23,16 @@ export function IncomesList(props: IncomesListProps) {
       <ul className="flex flex-col gap-4">
         {incomes.map((income) => {
           return (
-            <li className="flex justify-between items-center py-2 border-b border-gray-200">
+            <li
+              key={income.id}
+              className="flex justify-between items-center py-2 border-b border-gray-200"
+            >
               <span className="text-xl">{income.mount}</span>
-              {/* <span className="text-gray-500">{income.date}</span> */}
+              <div>
+                <div className="text-gray-500">
+                  {format(income.dateTime, 'd MMM yyyy: hh:mm a')}
+                </div>
+              </div>
             </li>
           );
         })}

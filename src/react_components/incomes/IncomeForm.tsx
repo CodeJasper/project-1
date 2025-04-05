@@ -15,9 +15,14 @@ export function IncomeForm(props: IncomeForm) {
   } = useForm<Income>();
 
   const createIncome = async (data: Income) => {
+    const { accountId, dateTime, mount } = data;
     const response = await fetch('/api/incomes/', {
       method: 'POST',
-      body: JSON.stringify({ accountId: data.accountId, mount: data.mount }),
+      body: JSON.stringify({
+        accountId,
+        mount,
+        dateTime,
+      }),
     });
 
     if (!response.ok) {
@@ -52,6 +57,19 @@ export function IncomeForm(props: IncomeForm) {
           />
           {errors.mount?.message && (
             <span className="text-red-500 text-xs italic">{errors.mount.message}</span>
+          )}
+        </div>
+
+        <div className="flex flex-col gap-1">
+          <label>Fecha y hora:</label>
+          <input
+            className="rounded-md border border-gray-300 px-4 py-2"
+            placeholder="Ingresa la fecha y hora"
+            type="datetime-local"
+            {...register('dateTime', { required: 'La fecha y hora es obligatoria' })}
+          />
+          {errors.dateTime?.message && (
+            <span className="text-red-500 text-xs italic">{errors.dateTime.message}</span>
           )}
         </div>
 

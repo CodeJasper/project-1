@@ -1,6 +1,7 @@
 import type { APIContext } from 'astro';
 import { prisma } from '@/prisma/connection';
 import type { Account } from '@prisma/client';
+import type { PrismaClientValidationError } from '@prisma/client/runtime/library';
 
 export async function GET({ params, request }: APIContext) {
   const url = new URL(request.url);
@@ -26,9 +27,13 @@ export async function POST({ request }: APIContext) {
       status: 200,
     });
   } catch (error) {
-    return new Response(JSON.stringify({ message: 'Has been ocurred and unknown error' }), {
-      status: 500,
-      headers: { 'Content-type': 'application/json' },
-    });
+    const prismaError = error as PrismaClientValidationError;
+    return new Response(
+      JSON.stringify({ message: `Has been ocurred and unknown error: ${prismaError.message}` }),
+      {
+        status: 500,
+        headers: { 'Content-type': 'application/json' },
+      }
+    );
   }
 }
