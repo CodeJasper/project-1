@@ -14,3 +14,24 @@ export async function GET({ params, request }: APIContext) {
     data: accounts
   }))
 };
+
+export async function POST({ request }: APIContext) {
+  try {
+    const { name, color } = await request.json();
+    const test = await prisma.account.create({data: { name, color }})
+
+    return new Response(null, {
+      status: 200,
+    })
+  } catch (error) {
+    return new Response(
+      JSON.stringify(
+        { message: "Has been ocurred and unknown error"}
+      ),
+      {
+        status: 500,
+        headers: { "Content-type": "application/json" }
+      }
+    )
+  }
+}
