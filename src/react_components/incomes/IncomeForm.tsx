@@ -1,5 +1,7 @@
 import type { Account, Income } from "@prisma/client";
 import { useForm } from "react-hook-form";
+import { useMutation } from "@tanstack/react-query";
+import { queryClient } from "@/store/queryClient";
 
 type IncomeForm = {
   accounts: Account[];
@@ -12,8 +14,24 @@ export function IncomeForm(props: IncomeForm) {
     handleSubmit
   } = useForm<Income>();
 
+  const createIncome = async (data: Income) => {
+    const response = await fetch("/api/incomes/", {
+      method: "POST",
+      body: JSON.stringify({ accountId: data.accountId, mount: data.mount })
+    })
+
+    if(!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message)
+    }
+  }
+
+  const { mutate, error: mutationError } = useMutation({
+    mutationFn: createIncome
+  }, queryClient)
+
   const onSubmit = (data: Income) => {
-    console.log(data);
+    mutate(data);
   }
 
   const { accounts } = props;
@@ -54,6 +72,11 @@ export function IncomeForm(props: IncomeForm) {
             )}
           </div>
         </div>
+
+        {mutationError && (
+          <span className="text-red-500 text-xs italic">{mutationError.message}</span>
+        )}
+
         <div className="flex gap-4 pt-4">
           <a href="/income" className="w-1/2 text-center border border-gray-900 text-gray-900 rounded-md px-4 py-2 hover:bg-gray-100">Cancelar</a>
           <button type="submit" className="w-1/2 text-center bg-gray-200 px-4 py-2 border border-gray-900 rounded-md hover:bg-gray-700 hover:text-white">Aceptar</button>
