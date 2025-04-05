@@ -1,75 +1,9 @@
 ---
 import Layout from "@/layouts/Layout.astro";
+import AccountForm from "@/react_components/account_form/AccountForm";
 
 ---
 
 <Layout>
-  <div class="mx-auto max-w-md rounded-md p-4 shadow-lg">
-    <h1 class="text-lg mb-4 font-medium">Nuevo Ingreso</h1>
-    <form class="flex flex-col gap-4" novalidate>
-      <div class="flex flex-col gap-1">
-        <label>Nombre:</label>
-        <input name="name" required class="rounded-md border border-gray-300 px-4 py-2" placeholder="Ingresa el nombre" />
-        <span class="hidden text-red-500 text-xs italic">Este campo es obligatorio</span>
-      </div>
-
-      <div class="flex flex-col gap-1">
-        <label>Color:</label>
-        <input name="color" required type="color" class="h-11 w-1/4 rounded-md border border-gray-300 px-4 py-2" placeholder="Selecciona el nombre" />
-        <span class="hidden text-red-500 text-xs italic">Este campo es obligatorio</span>
-      </div>
-
-      <div class="flex gap-4 pt-4">
-        <a href="/accounts" class="w-1/2 text-center border border-gray-900 text-gray-900 rounded-md px-4 py-2 hover:bg-gray-100">Cancelar</a>
-        <button type="submit" class="w-1/2 text-center bg-gray-200 px-4 py-2 border border-gray-900 rounded-md hover:bg-gray-700 hover:text-white">Aceptar</button>
-      </div>
-    </form>
-  </div>
+  <AccountForm client:load/>
 </Layout>
-
-<script>
-  const handleValidations = (formData: FormData) => {
-    const formKeys = formData.keys();
-    formKeys.forEach((key) => {
-      console.log(key)
-      const element = document.querySelector(`[name=${key}]`) as HTMLFormElement
-      if(element.required && !formData.get(key)) {
-        const errorElement = element.nextElementSibling;
-        errorElement?.classList.remove('hidden');
-      }
-    })
-  }
-
-  const handleCreateAccunt = (form: HTMLFormElement) => {
-    const formData = new FormData(form);
-
-    if(!form.checkValidity()) {
-      handleValidations(formData)
-      return;
-    }
-
-    const name = formData.get("name");
-    const color = formData.get("color");
-
-    const currentAccounts = JSON.parse(localStorage.getItem('accounts') || '[]');
-    const newAccounts = currentAccounts;
-
-    newAccounts.push({ name, color });
-    localStorage.setItem('accounts', JSON.stringify(newAccounts));
-
-    window.location.href = '/accounts';
-  }
-
-  const handleSubmit = () => {
-    const form = document.querySelector('form');
-
-    if(!form) return;
-
-    form.addEventListener("submit", (event) => {
-      event.preventDefault();
-      handleCreateAccunt(form)
-    })
-  }
-
-  handleSubmit();
-</script>
