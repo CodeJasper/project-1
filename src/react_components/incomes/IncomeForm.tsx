@@ -1,38 +1,41 @@
-import type { Account, Income } from "@prisma/client";
-import { useForm } from "react-hook-form";
-import { useMutation } from "@tanstack/react-query";
-import { queryClient } from "@/store/queryClient";
+import type { Account, Income } from '@prisma/client';
+import { useForm } from 'react-hook-form';
+import { useMutation } from '@tanstack/react-query';
+import { queryClient } from '@/store/queryClient';
 
 type IncomeForm = {
   accounts: Account[];
-}
+};
 
 export function IncomeForm(props: IncomeForm) {
   const {
     register,
     formState: { errors },
-    handleSubmit
+    handleSubmit,
   } = useForm<Income>();
 
   const createIncome = async (data: Income) => {
-    const response = await fetch("/api/incomes/", {
-      method: "POST",
-      body: JSON.stringify({ accountId: data.accountId, mount: data.mount })
-    })
+    const response = await fetch('/api/incomes/', {
+      method: 'POST',
+      body: JSON.stringify({ accountId: data.accountId, mount: data.mount }),
+    });
 
-    if(!response.ok) {
+    if (!response.ok) {
       const errorData = await response.json();
-      throw new Error(errorData.message)
+      throw new Error(errorData.message);
     }
-  }
+  };
 
-  const { mutate, error: mutationError } = useMutation({
-    mutationFn: createIncome
-  }, queryClient)
+  const { mutate, error: mutationError } = useMutation(
+    {
+      mutationFn: createIncome,
+    },
+    queryClient
+  );
 
   const onSubmit = (data: Income) => {
     mutate(data);
-  }
+  };
 
   const { accounts } = props;
   return (
@@ -62,13 +65,17 @@ export function IncomeForm(props: IncomeForm) {
               <option value="">Selecciona una cuenta</option>
               {accounts.map((account) => {
                 return (
-                  <option key={account.id} value={account.id}>{account.name}</option>
-                )
+                  <option key={account.id} value={account.id}>
+                    {account.name}
+                  </option>
+                );
               })}
             </select>
-            <span className="absolute right-2 top-1/2 -translate-y-1/2 material-icons">keyboard_arrow_down</span>
+            <span className="absolute right-2 top-1/2 -translate-y-1/2 material-icons">
+              keyboard_arrow_down
+            </span>
             {errors.accountId?.message && (
-            <span className="text-red-500 text-xs italic">{errors.accountId.message}</span>
+              <span className="text-red-500 text-xs italic">{errors.accountId.message}</span>
             )}
           </div>
         </div>
@@ -78,10 +85,20 @@ export function IncomeForm(props: IncomeForm) {
         )}
 
         <div className="flex gap-4 pt-4">
-          <a href="/income" className="w-1/2 text-center border border-gray-900 text-gray-900 rounded-md px-4 py-2 hover:bg-gray-100">Cancelar</a>
-          <button type="submit" className="w-1/2 text-center bg-gray-200 px-4 py-2 border border-gray-900 rounded-md hover:bg-gray-700 hover:text-white">Aceptar</button>
+          <a
+            href="/income"
+            className="w-1/2 text-center border border-gray-900 text-gray-900 rounded-md px-4 py-2 hover:bg-gray-100"
+          >
+            Cancelar
+          </a>
+          <button
+            type="submit"
+            className="w-1/2 text-center bg-gray-200 px-4 py-2 border border-gray-900 rounded-md hover:bg-gray-700 hover:text-white"
+          >
+            Aceptar
+          </button>
         </div>
       </form>
     </div>
-  )
+  );
 }

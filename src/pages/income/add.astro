@@ -1,11 +1,10 @@
 ---
-import Layout from "@/layouts/Layout.astro";
-import { prisma } from "@/prisma/connection";
-import { IncomeForm } from "@/react_components/incomes/IncomeForm";
-import type { Account } from "@prisma/client";
+import Layout from '@/layouts/Layout.astro';
+import { prisma } from '@/prisma/connection';
+import { IncomeForm } from '@/react_components/incomes/IncomeForm';
+import type { Account } from '@prisma/client';
 
-const accounts:Account[] = await prisma.account.findMany();
-
+const accounts: Account[] = await prisma.account.findMany();
 ---
 
 <Layout>

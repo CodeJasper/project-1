@@ -1,39 +1,42 @@
-import { useForm } from "react-hook-form";
-import { useMutation } from "@tanstack/react-query";
-import { queryClient } from "@/store/queryClient";
-import type { Account } from "@prisma/client";
+import { useForm } from 'react-hook-form';
+import { useMutation } from '@tanstack/react-query';
+import { queryClient } from '@/store/queryClient';
+import type { Account } from '@prisma/client';
 
 export default function AccountForm() {
   const {
     handleSubmit,
     register,
-    formState: { errors }
+    formState: { errors },
   } = useForm<Account>();
 
   const createAccount = async (data: Account) => {
     const response = await fetch('/api/accounts', {
-      method: "POST",
-      body: JSON.stringify({ name: data.name, color: data.color })
-    })
+      method: 'POST',
+      body: JSON.stringify({ name: data.name, color: data.color }),
+    });
 
-    if(!response.ok){
+    if (!response.ok) {
       const errorData = await response.json();
       throw new Error(errorData.message);
     }
-  }
+  };
 
-  const { mutate, error: mutationError } = useMutation({
-    mutationFn: createAccount,
-    onSuccess: () => {
-      console.log("success");
+  const { mutate, error: mutationError } = useMutation(
+    {
+      mutationFn: createAccount,
+      onSuccess: () => {
+        console.log('success');
+      },
     },
-  }, queryClient)
+    queryClient
+  );
 
   const onSubmit = (data: Account) => {
     mutate(data);
-  }
+  };
 
-  return(
+  return (
     <div className="mx-auto max-w-md rounded-md p-4 shadow-lg">
       <h1 className="text-lg mb-4 font-medium">Nueva cuenta</h1>
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
@@ -42,7 +45,7 @@ export default function AccountForm() {
           <input
             className="rounded-md border border-gray-300 px-4 py-2"
             placeholder="Ingresa el nombre"
-            {...register('name', { required: "El nombre es obligatorio" })}
+            {...register('name', { required: 'El nombre es obligatorio' })}
           />
           {errors.name?.message && (
             <span className="text-red-500 text-xs italic">{errors.name.message}</span>
@@ -54,7 +57,7 @@ export default function AccountForm() {
           <input
             type="color"
             className="h-11 w-1/4 rounded-md border border-gray-300 px-4 py-2"
-            {...register('color', { required: "El color es obligatorio" })}
+            {...register('color', { required: 'El color es obligatorio' })}
           />
           {errors.color?.message && (
             <span className="text-red-500 text-xs italic">{errors.color.message}</span>
@@ -66,10 +69,20 @@ export default function AccountForm() {
         )}
 
         <div className="flex gap-4 pt-4">
-          <a href="/accounts" className="w-1/2 text-center border border-gray-900 text-gray-900 rounded-md px-4 py-2 hover:bg-gray-100">Cancelar</a>
-          <button type="submit" className="w-1/2 text-center bg-gray-200 px-4 py-2 border border-gray-900 rounded-md hover:bg-gray-700 hover:text-white">Aceptar</button>
+          <a
+            href="/accounts"
+            className="w-1/2 text-center border border-gray-900 text-gray-900 rounded-md px-4 py-2 hover:bg-gray-100"
+          >
+            Cancelar
+          </a>
+          <button
+            type="submit"
+            className="w-1/2 text-center bg-gray-200 px-4 py-2 border border-gray-900 rounded-md hover:bg-gray-700 hover:text-white"
+          >
+            Aceptar
+          </button>
         </div>
       </form>
     </div>
-  )
+  );
 }

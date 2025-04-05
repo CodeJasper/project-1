@@ -15,15 +15,15 @@ datasource db {
 }
 
 model Account {
-  id        Int       @id @default(autoincrement())
-  name      String
-  color     String
-  incomes   Income[]
+  id      Int      @id @default(autoincrement())
+  name    String
+  color   String
+  incomes Income[]
 }
 
 model Income {
-  id          Int       @id @default(autoincrement())
-  mount       Int
-  account     Account   @relation(fields: [accountId], references: [id])
-  accountId   Int
+  id        Int     @id @default(autoincrement())
+  mount     Int
+  account   Account @relation(fields: [accountId], references: [id])
+  accountId Int
 }
