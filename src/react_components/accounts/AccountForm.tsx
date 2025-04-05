@@ -1,12 +1,7 @@
 import { useForm } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
 import { queryClient } from "@/store/queryClient";
-import { useEffect } from "react";
-
-type Account = {
-  name: string;
-  color: string;
-}
+import type { Account } from "@prisma/client";
 
 export default function AccountForm() {
   const {
