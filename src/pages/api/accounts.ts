@@ -1,5 +1,6 @@
 import type { APIContext } from "astro";
-import { prisma } from "../../../prisma/connection";
+import { prisma } from "@/prisma/connection"
+import type { Account } from "@prisma/client";
 
 
 export async function GET({ params, request }: APIContext) {
@@ -17,8 +18,8 @@ export async function GET({ params, request }: APIContext) {
 
 export async function POST({ request }: APIContext) {
   try {
-    const { name, color } = await request.json();
-    const test = await prisma.account.create({data: { name, color }})
+    const { name, color } = await request.json() as Account;
+    await prisma.account.create({data: { name, color }})
 
     return new Response(null, {
       status: 200,
